@@ -1,4 +1,4 @@
-//contains the treasure hunt class definition and function prototypes
+//contains the treasure hunt class definition and function prototypes. tells the compiler that this class exists as well as the member functions
 #ifndef TREASUREHUNT_H
 #define TREASUREHUNT_H
 
