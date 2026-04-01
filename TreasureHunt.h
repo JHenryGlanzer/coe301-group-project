@@ -19,10 +19,8 @@ private:
 
 public:
     TreasureHunt();
-
     bool loadMap(const std::string& filename);
     bool loadClues(const std::string& filename);
-
     void drawMap() const;
     void movePlayer(char input);
     void triggerClue(char landmarkSymbol);
