@@ -5,6 +5,9 @@
 #include <vector>
 #include <string>
 #include "Clue.h"
+#include <fstream>
+#include <iostream>
+using namespace std;
 
 class TreasureHunt {
 private:
