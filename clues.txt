@@ -1,1 +1,6 @@
-
+T|What year was the UT Tower built?|1937|3|10
+P|What animal is Turtle Pond named after?|turtle|3|8
+H|What does H in Hogg Auditorium stand for?|hogg|3|8
+U|What is the name of the student center?|texas union|3|8
+G|Which president is on the statue?|george washington|3|10
+F|What is the name of the main fountain?|littlefield fountain|3|10
