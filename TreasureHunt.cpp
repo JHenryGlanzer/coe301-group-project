@@ -27,7 +27,46 @@ return true;
 }
 
 void TreasureHunt::loadClues(const std::string& filename) {
-    // code to load the clues from the clues text file
+    std::ifstream file(filename);
+
+    if (!file.is_open()) {
+        std::cerr << "Unable to open clues file" << std::endl;
+        return;
+    }
+
+    std::string line;
+
+    while (std::getline(file, line)) {
+        // Format: Symbol|Question|Answer|Attempts|Points
+
+        size_t pos = 0;
+        std::vector<std::string> parts;
+
+        // Split line by '|'
+        while ((pos = line.find('|')) != std::string::npos) {
+            parts.push_back(line.substr(0, pos));
+            line.erase(0, pos + 1);
+        }
+        parts.push_back(line); // last piece
+
+        // Make sure we got all 5 parts
+        if (parts.size() != 5) {
+            std::cerr << "Invalid clue format, skipping line." << std::endl;
+            continue;
+        }
+
+        char symbol = parts[0][0];
+        std::string question = parts[1];
+        std::string answer = parts[2];
+        int attempts = std::stoi(parts[3]);
+        int points = std::stoi(parts[4]);
+
+        // Create Clue object and add to vector
+        Clue newClue(symbol, question, answer, attempts, points);
+        clues.push_back(newClue);
+    }
+
+    file.close();
 }
 
 void TreasureHunt::startGame() {
@@ -106,5 +145,47 @@ void TreasureHunt::movePlayer(char input) {
 }
 
 void TreasureHunt::triggerClue(char landmarkSymbol) {
-    // code to trigger a clue when the player lands on a landmark symbol. use the findClueBySymbol function to find the corresponding clue in the clues vector, and then display the clue's description and update the player's score and completedCount as necessary.
+    Clue* cluePtr = findClueBySymbol(landmarkSymbol);
+
+    if (cluePtr == nullptr) {
+        std::cout << "No clue found for this landmark." << std::endl;
+        return;
+    }
+
+    // If already completed, do nothing
+    if (cluePtr->isCompleted()) {
+        std::cout << "You already completed this clue!" << std::endl;
+        return;
+    }
+
+    std::cout << "\nYou found a clue!" << std::endl;
+    std::cout << cluePtr->getQuestion() << std::endl;
+
+    int attemptsLeft = cluePtr->getMaxAttempts();
+    std::string userAnswer;
+
+    while (attemptsLeft > 0) {
+        std::cout << "Attempts remaining: " << attemptsLeft << std::endl;
+        std::cout << "Your answer: ";
+        std::getline(std::cin, userAnswer);
+
+        if (cluePtr->checkAnswer(userAnswer)) {
+            std::cout << "Correct!" << std::endl;
+
+            score += cluePtr->getPoints();
+            cluePtr->markCompleted();
+            completedCount++;
+
+            return;
+        } else {
+            std::cout << "Incorrect." << std::endl;
+            attemptsLeft--;
+        }
+    }
+
+    // If they fail all attempts
+    std::cout << "Out of attempts! The correct answer was: "
+              << cluePtr->getAnswer() << std::endl;
+
+    score -= cluePtr->getPoints() / 2; // optional penalty
 }
