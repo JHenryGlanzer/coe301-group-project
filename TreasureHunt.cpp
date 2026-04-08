@@ -31,10 +31,26 @@ void TreasureHunt::loadClues(const std::string& filename) {
 }
 
 void TreasureHunt::startGame() {
-    // code to start the game, including the main game loop
-    while("condition"){
-        "implement game loop here, including drawing the map, getting user input, moving the player, and checking for game over conditions using the other defined functions"
+    char input;
+    bool runningGame = true;
+    while (runningGame){
+        if (!totalLandmarks == 6 && score > 0)){
+            drawMap();
+            // asking user input
+            cout << "\n Choose your move:" << endl;
+            cout << "W - move up" << endl;
+            cout << "S - move down" << endl;
+            cout << "A - move left" << endl;
+            cout << "D - move right" << endl;
+            cin >> input;
+            // moves player
+            movePlayer(input);
+        }
+        else{
+            runningGame = false;
+        }
     }
+    return 0;
 }
 
 //gameplay functions
